@@ -102,8 +102,8 @@ class _CarouselImageState extends State<CarouselImageWidget> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              height: 10.0,
-              width: 10.0,
+              height: 20.0,
+              width: 20.0,
               child:
                   new CircularProgressIndicator(backgroundColor: Colors.amber),
             ),
