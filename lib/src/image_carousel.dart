@@ -94,14 +94,16 @@ class _CarouselImageState extends State<CarouselImageWidget> {
     } else {
 
       
-      // return new SizedBox(
+      return new SizedBox(
       
-      //   height: 20.0,
-      //   width: 20.0,
-      //   child: new CircularProgressIndicator(),
-      // );
+        height: 20.0,
+        width: 20.0,
+        child: new CircularProgressIndicator(backgroundColor:Colors.amber),
+      );
 
-      return new Text("loading");
+
+
+      //return new Text("loading");
     }
   }
 
