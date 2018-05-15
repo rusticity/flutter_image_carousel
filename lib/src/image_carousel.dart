@@ -94,11 +94,14 @@ class _CarouselImageState extends State<CarouselImageWidget> {
     } else {
 
       
-      return new SizedBox(
-        height: 20.0,
-        width: 20.0,
-        child: new CircularProgressIndicator(),
-      );
+      // return new SizedBox(
+      
+      //   height: 20.0,
+      //   width: 20.0,
+      //   child: new CircularProgressIndicator(),
+      // );
+
+      return new Text("loading");
     }
   }
 
@@ -174,6 +177,7 @@ class _CarouselImageState extends State<CarouselImageWidget> {
   Widget build(BuildContext context) {
     return new Container(
       height: widget.height,
+      padding: const EdgeInsets.only( bottom: 20.0, left: 20.0, top: 20.0),
       child: _loading
           ? _getIndicator(widget.carousel.platform == null ? defaultTargetPlatform : widget.carousel.platform)
           : new GestureDetector(
