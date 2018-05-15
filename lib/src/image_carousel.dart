@@ -21,33 +21,36 @@ class ImageCarousel extends StatefulWidget {
   // If you prefer to use the Material or Cupertino style activity indicator set the [platform] parameter
   // Set [interval] to let the carousel loop through each photo automatically
   // Pinch to zoom will be turned on by default
-  ImageCarousel(
-      this.imageProviders, {
-        this.height = 250.0,
-        this.platform,
-        this.interval,
-        this.allowZoom = true,
-        this.tabController,
-        this.fit = BoxFit.cover,
-        this.showCloseButtonOnZoom = false,
-        this.canCloseZoomOnTap = false
-      });
+  ImageCarousel(this.imageProviders,
+      {this.height = 250.0,
+      this.platform,
+      this.interval,
+      this.allowZoom = true,
+      this.tabController,
+      this.fit = BoxFit.cover,
+      this.showCloseButtonOnZoom = false,
+      this.canCloseZoomOnTap = false});
 
   @override
   State createState() => new _ImageCarouselState();
 }
 
-class _ImageCarouselState extends State<ImageCarousel> with SingleTickerProviderStateMixin {
+class _ImageCarouselState extends State<ImageCarousel>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = widget.tabController ?? new TabController(vsync: this, length: widget.imageProviders.length);
+    _tabController = widget.tabController ??
+        new TabController(vsync: this, length: widget.imageProviders.length);
 
     if (widget.interval != null) {
       new Timer.periodic(widget.interval, (_) {
-        _tabController.animateTo(_tabController.index == _tabController.length - 1 ? 0 : ++_tabController.index);
+        _tabController.animateTo(
+            _tabController.index == _tabController.length - 1
+                ? 0
+                : ++_tabController.index);
       });
     }
   }
@@ -65,7 +68,8 @@ class _ImageCarouselState extends State<ImageCarousel> with SingleTickerProvider
       child: new TabBarView(
         controller: _tabController,
         children: widget.imageProviders.map((ImageProvider provider) {
-          return new CarouselImageWidget(widget, provider, widget.fit, widget.height, widget.showCloseButtonOnZoom);
+          return new CarouselImageWidget(widget, provider, widget.fit,
+              widget.height, widget.showCloseButtonOnZoom);
         }).toList(),
       ),
     );
@@ -79,7 +83,8 @@ class CarouselImageWidget extends StatefulWidget {
   final double height;
   final bool showDismissButtonOnZoom;
 
-  CarouselImageWidget(this.carousel, this.imageProvider, this.fit, this.height, this.showDismissButtonOnZoom);
+  CarouselImageWidget(this.carousel, this.imageProvider, this.fit, this.height,
+      this.showDismissButtonOnZoom);
 
   @override
   State createState() => new _CarouselImageState();
@@ -92,16 +97,17 @@ class _CarouselImageState extends State<CarouselImageWidget> {
     if (platform == TargetPlatform.iOS) {
       return new CupertinoActivityIndicator();
     } else {
-
-      
-      return new SizedBox(
-      
-        height: 20.0,
-        width: 20.0,
-        child: new CircularProgressIndicator(backgroundColor:Colors.amber),
-      );
-
-
+      return new Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 10.0,
+              width: 10.0,
+              child:
+                  new CircularProgressIndicator(backgroundColor: Colors.amber),
+            ),
+          ]);
 
       //return new Text("loading");
     }
@@ -114,10 +120,14 @@ class _CarouselImageState extends State<CarouselImageWidget> {
     );
 
     Navigator.of(context).push(
-      defaultTargetPlatform == TargetPlatform.iOS
-          ? new CupertinoPageRoute(builder: (BuildContext context) => scaffold, fullscreenDialog: true)
-          : new MaterialPageRoute(builder: (BuildContext context) => scaffold, fullscreenDialog: true),
-    );
+          defaultTargetPlatform == TargetPlatform.iOS
+              ? new CupertinoPageRoute(
+                  builder: (BuildContext context) => scaffold,
+                  fullscreenDialog: true)
+              : new MaterialPageRoute(
+                  builder: (BuildContext context) => scaffold,
+                  fullscreenDialog: true),
+        );
   }
 
   Widget _buildBody() {
@@ -126,28 +136,20 @@ class _CarouselImageState extends State<CarouselImageWidget> {
     if (widget.carousel.allowZoom && widget.showDismissButtonOnZoom) {
       body = new Stack(
         children: [
-          new ZoomableImage(
-              widget.imageProvider,
-              scale: 16.0
-          ),
+          new ZoomableImage(widget.imageProvider, scale: 16.0),
           new Positioned(
               child: new IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  color: Colors.white
-              ),
+                  color: Colors.white),
               top: 30.0,
-              right: 6.0
-          )
+              right: 6.0)
         ],
       );
     } else {
-      body = new ZoomableImage(
-          widget.imageProvider,
-          scale: 16.0
-      );
+      body = new ZoomableImage(widget.imageProvider, scale: 16.0);
     }
 
     if (widget.carousel.canCloseZoomOnTap) {
@@ -179,20 +181,21 @@ class _CarouselImageState extends State<CarouselImageWidget> {
   Widget build(BuildContext context) {
     return new Container(
       height: widget.height,
-      padding: const EdgeInsets.only( bottom: 20.0, left: 20.0, top: 20.0),
       child: _loading
-          ? _getIndicator(widget.carousel.platform == null ? defaultTargetPlatform : widget.carousel.platform)
+          ? _getIndicator(widget.carousel.platform == null
+              ? defaultTargetPlatform
+              : widget.carousel.platform)
           : new GestureDetector(
-        child: new Image(
-          image: widget.imageProvider,
-          fit: widget.fit,
-        ),
-        onTap: () {
-          if (widget.carousel.allowZoom) {
-            _toZoomRoute();
-          }
-        },
-      ),
+              child: new Image(
+                image: widget.imageProvider,
+                fit: widget.fit,
+              ),
+              onTap: () {
+                if (widget.carousel.allowZoom) {
+                  _toZoomRoute();
+                }
+              },
+            ),
     );
   }
 }
